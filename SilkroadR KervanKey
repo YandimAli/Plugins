@@ -49,4 +49,4 @@ def handle_chat(t,player,msg):
 	else:
 		pass
 
-log("{} loaded... it is edited by {}".format(pName,pEditor)
+log("{} loaded... it is edited by {}".format(pName,pEditor))
