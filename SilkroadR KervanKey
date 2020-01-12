@@ -4,6 +4,9 @@ import phBotChat
 from time import sleep
 import os
 
+pName="KervanKey"
+pEditor="YandimAli"
+
 def handle_chat(t,player,msg):
 	if t == 7 :
 		if msg.__contains__("Smallest"):
@@ -46,4 +49,4 @@ def handle_chat(t,player,msg):
 	else:
 		pass
 
-log("Kervan Key from notice loaded...")
+log("{} loaded... it is edited by {}".format(pName,pEditor)
