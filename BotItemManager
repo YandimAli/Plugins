@@ -1,0 +1,306 @@
+from phBot import *
+import QtBind
+import phBotChat
+from time import sleep
+
+pName = "Bot Item Manager"
+gui = QtBind.init(__name__, "Bot Item Manager")
+metaeditornick = QtBind.createLabel(gui, "Sorulariniz icin : Bsilkroad : vKing  // Csilkroad : vKing // JollyGame Forum : pierreberde", 40, 267)
+
+#Inventory İçeriği Bölümü
+ButtonArea1 = QtBind.createList(gui, 540, 25, 180, 240)
+#Degree Place
+lblDegree = QtBind.createLabel(gui,"Bu uygulama       Derece itemleri gosterir. (Su an sadece LMP aktif)",40,22)
+tbxDegree = QtBind.createLineEdit(gui, "11", 105, 20, 15, 15)
+#Stones and LMP
+lLMP = QtBind.createLabel(gui, "Lucky Magic Powder", 565, 35)
+qLMP = QtBind.createLabel(gui, "0", 684, 35)
+lluck = QtBind.createLabel(gui, "Luck Stone ", 565, 50)
+qluck = QtBind.createLabel(gui, "0", 684, 50)
+lsteady = QtBind.createLabel(gui, "Steady Stone", 565, 65)
+qsteady = QtBind.createLabel(gui, "0", 684, 65)
+limmortal = QtBind.createLabel(gui, "Immortal Stone", 565, 80)
+qimmortal = QtBind.createLabel(gui, "0", 684, 80)
+#Elixir
+lCIZGI = QtBind.createLabel(gui, "_____________________", 565, 93)
+lWeapon = QtBind.createLabel(gui, "Weapon", 565, 107)
+lProtector = QtBind.createLabel(gui, "Protector", 565, 122)
+lAccessory = QtBind.createLabel(gui, "Accessory", 565, 137)
+lShield = QtBind.createLabel(gui, "Shield", 565, 152)
+qweapon = QtBind.createLabel(gui, "0", 684, 107)
+qprotector = QtBind.createLabel(gui, "0", 684, 122)
+qaccessory = QtBind.createLabel(gui, "0", 684, 137)
+qshield = QtBind.createLabel(gui, "0", 684, 152)
+#Coin
+lCIZGI = QtBind.createLabel(gui, "_____________________", 565, 174)
+lGoldC = QtBind.createLabel(gui, "Gold Coin(BSRO)", 565, 190)
+lSilverC = QtBind.createLabel(gui, "Silver Coin(BSRO)", 565, 205)
+lCopperC = QtBind.createLabel(gui, "Copper Coin", 565, 221)
+lIronC = QtBind.createLabel(gui, "Iron Coin", 565, 238)
+qgold = QtBind.createLabel(gui, "0", 684, 190)
+qsilver = QtBind.createLabel(gui, "0", 684, 205)
+qcopper = QtBind.createLabel(gui, "0", 684, 221)
+qiron = QtBind.createLabel(gui, "0", 684, 238)
+
+#Buttons to Look Inventories
+ButtonArea2 = QtBind.createList(gui, 40, 55, 180, 88)
+btnStorage = QtBind.createButton(gui, "btnStorage_clicked", "       Bankayi Kontrol Et        ", 65, 92)
+btnGuildStorage = QtBind.createButton(gui, "btnGuildStorage_clicked", "  Guild Bankasini Kontrol Et  ", 65, 115)
+btnInventory = QtBind.createButton(gui, "btnInventory_clicked", "     Inventory Kontrol Et      ", 65, 69)
+
+#Player info
+ButtonArea3 = QtBind.createList(gui, 240, 55, 238, 88)
+lblplayer = QtBind.createLabel(gui, "Ana Karakter Adi :", 250, 64)  # Player Label
+tbxplayer = QtBind.createLineEdit(gui, "Hellixir", 350, 60, 80, 18)  # Player Edit Text
+lblparola = QtBind.createLabel(gui, "Mesaj Kontrol Kodu :", 250, 88)  # Parola Label
+tbxparola = QtBind.createLineEdit(gui, "vxKontrol", 350, 84, 80, 18)  # Parola Text
+
+lblinformation1 = QtBind.createLabel(gui, "*Buraya yazilan bilgileri kimse ile paylasmayiniz!", 250, 107)
+
+#General Information
+ButtonArea4 = QtBind.createList(gui, 40, 160, 439, 85)
+lblinformation4 = QtBind.createLabel(gui, """-Ana karaketerinizden mesaj atarak diger karakterlerinizden bilgi alabilirsiniz.
+---Elixir Coin Stone ve LMP taglarinin basina nerdekini ogrenmek istediginizi yaziniz.
+----- i : inventory // s : Storage // g : Guild bankasini temsil eder.
+---Bankadaki (Storage) elixir sayisini ogrenmek icin ORNEK : sElixir
+-Mesaj Kontrol Kodu ile farkli karakter ile ana karakterinize veri gonderebilirsiniz.""", 50, 170)
+
+
+def btnStorage_clicked():
+    countItems("Storage")
+def btnGuildStorage_clicked():
+    countItems("GuildStorage")
+def btnInventory_clicked():
+    countItems("Inventory")
+
+#Tetikleyici mesaj sistemi
+def handle_chat(t,player,msg):
+    #The msg from master player
+    if player == str(QtBind.text(gui, tbxplayer)):
+        #Elixir
+        if msg =="sElixir" :
+            sElixir()
+        elif msg == "iElixir" :
+            iElixir()
+        elif msg == "gElixir" :
+            gElixir()
+        #Coin
+        elif msg =="sCoin" :
+            sCoin()
+        elif msg == "iCoin" :
+            iCoin()
+        elif msg == "gCoin" :
+            gCoin()
+        #LMP
+        elif msg == "iLMP" :
+            iLMP()
+        elif msg == "sLMP" :
+            sLMP()
+        elif msg == "gLMP" :
+            gLMP()
+        #Stone
+        elif msg == "iStone":
+            iStone()
+        elif msg == "sStone":
+            sStone()
+        elif msg == "gStone":
+            gStone()
+        else:
+            phBotChat.Private(player, "Elixir LMP Coin kodlarini basina s, i, g koyarak yollayin. Ornek : sElixir")
+            sleep(1.0)
+            phBotChat.Private(player,"s : storage  i : inventory , g : Guild Bank temsil eder")
+    else:
+        if msg == (str(QtBind.text(gui, tbxparola))):
+            player = str(QtBind.text(gui, tbxplayer))
+            phBotChat.Private(player, "--------Storage-------")
+            sleep(1.0)
+            sElixir()
+            sleep(1.0)
+            sCoin()
+            sleep(1.0)
+            sLMP()
+            sleep(1.0)
+            sStone()
+            sleep(1.0)
+            phBotChat.Private(player,"--------Inventory--------")
+            sleep(1.0)
+            iElixir()
+            sleep(1.0)
+            iCoin()
+            sleep(1.0)
+            iLMP()
+            sleep(1.0)
+            iStone()
+            sleep(1.0)
+            phBotChat.Private(player,"---------Guild Storage-------")
+            sleep(1.0)
+            gElixir()
+            sleep(1.0)
+            gCoin()
+            sleep(1.0)
+            gLMP()
+            sleep(1.0)
+            gStone()
+            log("Parola araciligi ile veriler Ana Karaktere gonderildi.")
+        else:
+            pass
+
+#Elixir functions
+def ElixirChat():
+    player = str(QtBind.text(gui, tbxplayer))
+    if str(QtBind.text(gui, qweapon)) != "0" :
+        phBotChat.Private(player, "Weapon : " + str(QtBind.text(gui, qweapon)))
+        sleep(1.0)
+    if str(QtBind.text(gui, qprotector)) != "0" :
+        phBotChat.Private(player, "Protector : " + str(QtBind.text(gui, qprotector)))
+        sleep(1.0)
+    if str(QtBind.text(gui, qshield)) != "0" :
+        phBotChat.Private(player, "Shield : " + str(QtBind.text(gui, qshield)))
+        sleep(1.0)
+    if str(QtBind.text(gui, qaccessory)) != "0" :
+        phBotChat.Private(player, "Accessory : " + str(QtBind.text(gui, qaccessory)))
+    else:
+        phBotChat.Private(player,"None")
+    log("The number of Elixirs has been sent!")
+
+def sElixir():
+    btnStorage_clicked()
+    ElixirChat()
+def iElixir():
+    btnInventory_clicked()
+    ElixirChat()
+def gElixir():
+    btnGuildStorage_clicked()
+    ElixirChat()
+
+#Coin Functions
+def CoinChat():
+    player = str(QtBind.text(gui, tbxplayer))
+    if str(QtBind.text(gui, qgold)) != "0" :
+        phBotChat.Private(player, "Gold Coin : " + str(QtBind.text(gui, qgold)))
+        sleep(1.0)
+    if str(QtBind.text(gui, qiron)) != "0":
+        phBotChat.Private(player, "Iron Coin : " + str(QtBind.text(gui, qiron)))
+        sleep(1.0)
+    if str(QtBind.text(gui, qsilver)) != "0" :
+       phBotChat.Private(player, "Silver Coin : " + str(QtBind.text(gui, qsilver)))
+       sleep(1.0)
+    if str(QtBind.text(gui, qcopper)) != "0":
+        phBotChat.Private(player, "Copper Coin : " + str(QtBind.text(gui, qcopper)))
+    else:
+        phBotChat.Private(player,"None")
+    log("The number of Coins has been sent!")
+
+def sCoin():
+    btnStorage_clicked()
+    CoinChat()
+def iCoin():
+    btnInventory_clicked()
+    CoinChat()
+def gCoin():
+    btnGuildStorage_clicked()
+    CoinChat()
+
+#LMP Function
+def LMPChat():
+    player = str(QtBind.text(gui, tbxplayer))
+    if str(QtBind.text(gui, qLMP)) != "0" :
+        phBotChat.Private(player, "LMP : " + str(QtBind.text(gui, qLMP)))
+    else:
+        phBotChat.Private(player,"None")
+    log("The number of Lucky Magic Powders has been sent!")
+
+def iLMP():
+    btnInventory_clicked()
+    LMPChat()
+def sLMP():
+    btnStorage_clicked()
+    LMPChat()
+def gLMP():
+    btnGuildStorage_clicked()
+    LMPChat()
+#Stone Functions
+def StoneChat():
+    player = str(QtBind.text(gui, tbxplayer))
+    if str(QtBind.text(gui, qluck)) != "0":
+        phBotChat.Private(player, "Luck Stone : " + str(QtBind.text(gui, qluck)))
+    if str(QtBind.text(gui, qsteady)) != "0":
+        phBotChat.Private(player, "Luck Stone : " + str(QtBind.text(gui, qsteady)))
+    if str(QtBind.text(gui, qimmortal)) != "0":
+        phBotChat.Private(player, "Immortal Stone : " + str(QtBind.text(gui, qimmortal)))
+    else:
+        phBotChat.Private(player,"None")
+    log("The number of Stones has been sent!")
+def iStone():
+    btnInventory_clicked()
+    StoneChat()
+def sStone():
+    btnStorage_clicked()
+    StoneChat()
+def gStone():
+    btnGuildStorage_clicked()
+    StoneChat()
+
+#Counting items in the selected place function
+def countItems(countIn):
+    LMP = 0
+    weapon = 0
+    protector = 0
+    accessory = 0
+    shield = 0
+    gold = 0
+    silver = 0
+    copper = 0
+    iron = 0
+    luck = 0
+    steady = 0
+    immortal = 0
+    items = []
+    if countIn == "Storage":
+        items = get_storage()["items"]
+    elif countIn == "GuildStorage":
+        items = get_guild_storage()["items"]
+    elif countIn == "Inventory":
+        items = get_inventory()["items"]
+    degree = str(QtBind.text(gui, tbxDegree))
+    if items != []:
+        for item in items:
+            if item != None and "Magic" in item["name"] and "Powder" in item["name"]:
+                LMP += item["quantity"]
+            if item != None and "Intensifing" in item["name"] and "(weapon)" in item["name"]:
+                weapon += item["quantity"]
+            if item != None and "Intensifing" in item["name"] and "(protector)" in item["name"]:
+                protector += item["quantity"]
+            if item != None and "Intensifing" in item["name"] and "(accessory)" in item["name"]:
+                accessory += item["quantity"]
+            if item != None and "Intensifing" in item["name"] and "(Shield)" in item["name"]:
+                shield += item["quantity"]
+            if item != None and "Coin" in item["name"] and "Gold" in item["name"]:
+                gold += item["quantity"]
+            if item != None and "Coin" in item["name"] and "Silver" in item["name"]:
+                silver += item["quantity"]
+            if item != None and "Coin" in item["name"] and "Copper" in item["name"]:
+                copper += item["quantity"]
+            if item != None and "Coin" in item["name"] and "Iron" in item["name"]:
+                iron += item["quantity"]
+            if item != None and degree in item["name"] and "tablet" not in item["name"] and 'stone' in item["name"]:
+                if "steady" in item["name"]:
+                    steady += item["quantity"]
+                elif "luck" in item["name"]:
+                    luck += item["quantity"]
+                elif "immortal" in item["name"]:
+                    immortal += item["quantity"]
+    QtBind.setText(gui, qLMP, str(LMP))
+    QtBind.setText(gui, qweapon, str(weapon))
+    QtBind.setText(gui, qprotector, str(protector))
+    QtBind.setText(gui, qaccessory, str(accessory))
+    QtBind.setText(gui, qshield, str(shield))
+    QtBind.setText(gui, qgold, str(gold))
+    QtBind.setText(gui, qsilver, str(silver))
+    QtBind.setText(gui, qcopper, str(copper))
+    QtBind.setText(gui, qiron, str(iron))
+    QtBind.setText(gui, qluck, str(luck))
+    QtBind.setText(gui, qsteady, str(steady))
+    QtBind.setText(gui, qimmortal, str(immortal))
+
+log(" {} successfully loaded".format(pName))
