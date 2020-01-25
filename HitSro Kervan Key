@@ -7,21 +7,17 @@ pName="KervanKey"
 pEditor="YandimAli"
 
 def handle_chat(t,player,msg):
-	if msg.startswith("Lütfen"):
-		if t == 7:
-			liste = list()
-			z = re.search(r"(\d+)\ ve (\d+)", msg)
-			liste.append(int(z[1]))
-			liste.append(int(z[2]))
-			liste.sort()
-			Toplam = liste[0] + liste[1]
-			liste.clear
-			sleep(2.0)
-			phBotChat.All("!t {}".format(Toplam))
-			log("{} cevap olarak gonderildi.".format(Toplam))
-		else:
-			log("Sayilar bulunamadi")
+	if t == 7:
+		liste = list()
+		z = re.findall("\d+", msg)
+		liste.append(int(z[0]))
+		liste.append(int(z[1]))
+		Toplam = liste[0] + liste[1]
+		liste.clear
+		sleep(2.0)
+		phBotChat.All("!t {}".format(Toplam))
+		log("{} cevap olarak gonderildi.".format(Toplam))
 	else:
-		pass
+		log("Sayilar bulunamadi")
 
 log("{} basarili bir sekilde yuklendi.".format(pName))
