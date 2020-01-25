@@ -1,0 +1,24 @@
+from phBot import *
+import phBotChat
+import re
+from time import sleep
+
+pName="KervanKey"
+pEditor="YandimAli"
+
+def handle_chat(t,player,msg):
+	if t == 7:
+		liste = list()
+		z = re.search(r"(\d+)\ ve (\d+)", msg)
+		liste.append(int(z[1]))
+		liste.append(int(z[2]))
+		liste.sort()
+		Toplam = liste[0] + liste[1]
+		liste.clear
+		sleep(2.0)
+		phBotChat.All("!t "+str(Toplam))
+		log("{} cevap olarak gonderildi.".format(Toplam))
+	else:
+		pass
+
+log("{} basarili bir sekilde yuklendi.".format(pName))
