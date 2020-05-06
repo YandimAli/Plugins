@@ -1,0 +1,29 @@
+from phBot import *
+import phBotChat
+import random
+
+def handle_chat(t,player,msg):
+    if "Round" in msg and "yazan" in msg:  #Lucky First PM event
+        y = msg.split("[")
+        z = y[1].split("]")
+        phBotChat.Private("silkroadexe",z[0])
+        log("{} has been sent as an answer".format(z[0]))
+    elif "Tahmin" in msg and "Arası" in msg:  #Lucky Number Event
+        sylar = []
+        a = msg.split("[")
+        for x in a:
+            y = x.split("]")
+            sylar.append(y)
+        lis1 = sylar[1]
+        lis2 = sylar[2]
+        sy1 = lis1[0]
+        sy2 = lis2[0]
+
+        lse = [int(sayi1), int(sayi2)]
+        lse.sort()
+        rlk = [i for i in range(lse[0], lse[1])]
+        hmin = random.choice(rlk)
+        phBotChat.Private("silkroadexe",str(hmin))
+        log("{} has been sent as an answer".format(tahmin))
+
+log("Mares Event loaded!!! ")
