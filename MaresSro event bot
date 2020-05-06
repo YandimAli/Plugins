@@ -19,7 +19,7 @@ def handle_chat(t,player,msg):
         sy1 = lis1[0]
         sy2 = lis2[0]
 
-        lse = [int(sayi1), int(sayi2)]
+        lse = [int(sy1), int(sy2)]
         lse.sort()
         rlk = [i for i in range(lse[0], lse[1])]
         hmin = random.choice(rlk)
